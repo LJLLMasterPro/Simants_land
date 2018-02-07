@@ -57,24 +57,26 @@ void display_t::display( const std::size_t& compteur ) {
     m_curve.push_back(compteur);
     if ( m_curve.size( ) > 1 ) {
         std::vector< gui::segment > m_p_curve;
-        m_p_curve.reserve( 1024 );
+	 int sz_win = m_ref_win.size( ).first;
+	int ydec = m_ref_win.size( ).second - 1;
+        m_p_curve.reserve( sz_win );
         double h_max_val = 256. / std::max(double( m_curve.back( )), 1.);
-        double step      = 1024. / (double)( m_curve.size( ) );
+        double step      = double(sz_win) / (double)( m_curve.size( ) );
         if ( step > 1. ) {
             for ( std::size_t i = 0; i < m_curve.size( ) - 1; i++ ) {
                 m_p_curve.push_back(
-                    {gui::point( i * step, 767 - m_curve[i] * h_max_val, 0., gui::color::rgba( {255, 255, 127} ) ),
-                     gui::point( ( i + 1 ) * step, 767 - m_curve[i + 1] * h_max_val, 0.,
+                    {gui::point( i * step, ydec - m_curve[i] * h_max_val, 0., gui::color::rgba( {255, 255, 127} ) ),
+                     gui::point( ( i + 1 ) * step, ydec - m_curve[i + 1] * h_max_val, 0.,
                                  gui::color::rgba( {255, 255, 127} ) )} );
             }
         } else {
             double inv_step = 1. / (step+0.001);
-            for ( int i = 0; i < 1024; ++i ) {
+            for ( int i = 0; i < sz_win; ++i ) {
                 int ind  = int( i * inv_step);
                 int ind2 = int( ( i + 1 ) * inv_step );
                 m_p_curve.push_back(
-                    {gui::point( i, 767 - m_curve[ind] * h_max_val, 0., gui::color::rgba( {255, 255, 127} ) ),
-                     gui::point( i + 1, 767 - m_curve[ind2] * h_max_val, 0.,
+                    {gui::point( i, ydec - m_curve[ind] * h_max_val, 0., gui::color::rgba( {255, 255, 127} ) ),
+                     gui::point( i + 1, ydec - m_curve[ind2] * h_max_val, 0.,
                                  gui::color::rgba( {255, 255, 127} ) )} );
             }
         }
